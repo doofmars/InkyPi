@@ -8,7 +8,7 @@ class DisplayManager:
     def __init__(self, device_config):
         """Manages the display and rendering of images."""
         self.device_config = device_config
-        self.inky_display = auto()
+        self.inky_display = auto(ask_user=True)
         self.inky_display.set_border(self.inky_display.BLACK)
 
         # store display resolution in device config
@@ -28,5 +28,9 @@ class DisplayManager:
         image = resize_image(image, self.device_config.get_resolution(), image_settings)
 
         # Display the image on the Inky display
+        
+        if self.device_config.get_config("mock"):
+            print("Diplaying image")
+            return
         self.inky_display.set_image(image)
         self.inky_display.show()
