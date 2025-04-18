@@ -2,6 +2,7 @@
     "name": "InkyPi",
     "orientation": "horizontal",
     "inverted_image": false,
+    "mock": true,
     "scheduler_sleep_time": 60,
     "startup": true
 }
