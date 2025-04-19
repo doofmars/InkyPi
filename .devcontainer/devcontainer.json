@@ -8,8 +8,13 @@
 	"postCreateCommand": "pip3 install --no-cache-dir -r install/requirements.txt && pip3 install --no-cache-dir -r install/requirements-dev.txt",
 
 	"containerEnv": {
-        "SRC_DIR": "/workspaces/InkyPi/src"
+        "SRC_DIR": "/workspaces/InkyPi/src",
+		"DISPLAY": "${localEnv:DISPLAY}"
     },
+
+	"mounts": [
+        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind"
+    ],
 	
 	// add vscode settings
 	"customizations": {
