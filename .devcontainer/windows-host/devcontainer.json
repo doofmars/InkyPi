@@ -1,22 +1,16 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
-	"name": "Python 3",
+	"name": "Windows Host - Python 3",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/python:1-3.12-bullseye",
 
 	"postCreateCommand": "pip3 install --no-cache-dir -r install/requirements.txt && pip3 install --no-cache-dir -r install/requirements-dev.txt",
 
 	"containerEnv": {
-        "SRC_DIR": "/workspaces/InkyPi/src",
-		"DISPLAY": "${localEnv:DISPLAY}"
+        "SRC_DIR": "/workspaces/InkyPi/src"
     },
 
-	// You might have to enable window redirect on your host `xhost +`
-
-	"mounts": [
-        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind"
-    ],
 	
 	// add vscode settings
 	"customizations": {
