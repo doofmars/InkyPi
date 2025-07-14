@@ -2,6 +2,8 @@
 
 # set up logging
 import os, logging.config
+
+from plugins.gallery_folder import gallery_folder
 logging.config.fileConfig(os.path.join(os.path.dirname(__file__), 'config', 'logging.conf'))
 
 # suppress warning from inky library https://github.com/pimoroni/inky/issues/205
@@ -58,6 +60,7 @@ app.register_blueprint(main_bp)
 app.register_blueprint(settings_bp)
 app.register_blueprint(plugin_bp)
 app.register_blueprint(playlist_bp)
+app.register_blueprint(gallery_folder.gallery_bp)
 
 if __name__ == '__main__':
     from werkzeug.serving import is_running_from_reloader
