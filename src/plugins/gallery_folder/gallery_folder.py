@@ -50,7 +50,21 @@ class Gallery(BasePlugin):
         while new_index == current_index:
             new_index = random.randint(0, total_images - 1)
         return new_index
-    
+
+def generate_thumbnail(image_path, size=(300, 300)):
+    # Generate a thumbnail for the given image path and store it in the thumbnail folder
+    thumbnail_folder = resolve_path(os.path.join("static", "images", "gallery", "thumbnails"))
+    thumbnail_path = os.path.join(thumbnail_folder, os.path.basename(image_path))
+    if not os.path.isfile(thumbnail_path):
+        try:
+            with Image.open(image_path) as img:
+                img.thumbnail(size)
+                img.save(thumbnail_path, "JPEG")
+        except Exception as e:
+            logger.error(f"Error creating thumbnail: {str(e)}")
+            return None
+    return thumbnail_path
+
 gallery_bp = Blueprint('gallery_folder', __name__)
 
 @gallery_bp.route('/gallery/image', methods=['GET'])
@@ -117,7 +131,31 @@ def delete_image(filename):
 
     try:
         os.remove(file_path)
+        # Delete the thumbnail if it exists
+        thumbnail_path = os.path.join(folder, "thumbnails", filename)
+        if os.path.isfile(thumbnail_path):
+            os.remove(thumbnail_path)
         return jsonify({"message": "Image deleted successfully"}), 200
     except Exception as e:
         logger.error(f"Error deleting image file: {str(e)}")
         return jsonify({"error": "Failed to delete image file"}), 500
+    
+@gallery_bp.route('/gallery/thumbnail/<filename>', methods=['GET'])
+def get_thumbnail(filename):
+    folder = resolve_path(os.path.join("static", "images", "gallery"))
+    if not folder or not os.path.isdir(folder):
+        return jsonify({"error": "Configured folder not found"}), 400
+
+    image_path = os.path.join(folder, filename)
+    if not os.path.isfile(image_path):
+        return jsonify({"error": "Image not found"}), 404
+    thumbnail_path = generate_thumbnail(image_path)
+    if not thumbnail_path:
+        return jsonify({"error": "Failed to create thumbnail"}), 500 
+    try:
+        with open(thumbnail_path, 'rb') as f:
+            thumbnail_data = f.read()
+        return thumbnail_data, 200, {'Content-Type': 'image/jpeg'}
+    except Exception as e:
+        logger.error(f"Error reading thumbnail file: {str(e)}")
+        return jsonify({"error": "Failed to read thumbnail file"}), 500

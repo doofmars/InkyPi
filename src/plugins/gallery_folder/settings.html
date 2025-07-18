@@ -85,7 +85,7 @@
             grid.style.gap = '16px';
             data.images.forEach(image => {
                 const imgElement = document.createElement('img');
-                imgElement.src = `/gallery/image/${image}`;
+                imgElement.src = `/gallery/thumbnail/${image}`;
                 imgElement.alt = image;
                 imgElement.classList.add('gallery-image');
                 imgElement.style.width = '100%';
